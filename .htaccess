@@ -1,3 +1,9 @@
+#AddHandler php-cgi .php .htm .html
+#Action php-cgi /cgi-bin/php5.cgi
+
+
+
+
 # Apache configuration file
 # httpd.apache.org/docs/2.2/mod/quickreference.html
 

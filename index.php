@@ -1,19 +1,14 @@
 <?php
-/** *******************
- * FACEBOOK PHP SDK
- *********
- * $fb = Array();
- * $fb['on'] = true; // is fb enabled
- * $fb['app_id'] = 'YOUR_APP_ID'; // yours application app ID
- * $fb['secret'] = 'YOUR_APP_SECRET'; // yours application secret
- *
- * $fb['email']  = true; // should email  be retreived and saved to this field
- * $fb['avatar'] = true; // should avatar be retreived and saved to this field
- * $fb['likes]   = true; // should likes  be retreived and saved to this field
- * ...
- **********************/
-if((isset($fb['on'])) ? $fb['on'] : false ) {
+
+require_once "_config.inc";
+
+$html_str = ""; // used to define namespaces in <html> node
+
+// for $fb['on'] see _config.inc
+if( $fb['on'] ) {
     require 'libs/facebook-sdk/facebook.php';
+
+    $html_str .= ' xmlns:fb="http://www.facebook.com/2008/fbml"';
 
     $facebook = new Facebook(array(
         'appId'  => $fb['app_id'],
@@ -40,11 +35,11 @@ if((isset($fb['on'])) ? $fb['on'] : false ) {
 ?>
 <!DOCTYPE html>
 <!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
-<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
-<!--[if IE 7]>    <html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
-<!--[if IE 8]>    <html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="<?=$lang;?>"<?=$html_str;?>> <![endif]-->
+<!--[if IE 7]>    <html class="no-js lt-ie9 lt-ie8" lang="<?=$lang;?>"<?=$html_str;?>> <![endif]-->
+<!--[if IE 8]>    <html class="no-js lt-ie9" lang="<?=$lang;?>"<?=$html_str;?>> <![endif]-->
 <!-- Consider adding a manifest.appcache: h5bp.com/d/Offline -->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="<?=$lang;?>"<?=$html_str;?>> <!--<![endif]-->
 <head>
     <meta charset="utf-8">
 
@@ -72,6 +67,8 @@ if((isset($fb['on'])) ? $fb['on'] : false ) {
 </head>
 
 <body>
+    <?=(($fb['on'])?'<div id="fb-root"></div>':'');/* root node required by fb */?>
+
     <header>
 
     </header>
@@ -96,6 +93,24 @@ if((isset($fb['on'])) ? $fb['on'] : false ) {
     <script defer src="js/plugins.js"></script>
     <script defer src="js/script.js"></script>
     <!-- end scripts -->
+
+    <? if($fb['on']): ?>
+        <!-- Asynchronous Facebook API snippet.  -->
+        <script>
+            window.fbAsyncInit = function() {
+                FB.init({ cookie: true, xfbml: true, oauth: true,
+                    appId: '<?=$facebook->getAppID();?>'
+                });
+                FB.Event.subscribe('auth.login', function(response) { window.location.reload(); });
+                FB.Event.subscribe('auth.logout', function(response) { window.location.reload(); });
+            };
+            (function() {
+                var e = document.createElement('script'); e.async = true;
+                e.src = document.location.protocol + '//connect.facebook.net/pl_PL/all.js';
+                document.getElementById('fb-root').appendChild(e);
+            }());
+        </script>
+    <? endif; ?>
 
     <!-- Asynchronous Google Analytics snippet.  -->
     <script>
