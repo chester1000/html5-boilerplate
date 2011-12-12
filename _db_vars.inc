@@ -1,5 +1,5 @@
 <?
-
+    // .gitignore test
     $db = Array();
     $db['on'] = false;
 

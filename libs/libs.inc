@@ -60,7 +60,7 @@ function ww_utf8($str, $width, $break, $cut = false) { // word-wrap for utf-8 te
  **
  * returns given string
  **/
-function toLog($str,  $type="access") { // log given string of given type (optional: for given user)
+function toLog($str, $type="access") { // log given string of given type (optional: for given user)
 
     $log_path = dirname(__DIR__);
 
