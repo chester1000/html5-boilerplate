@@ -6,10 +6,9 @@
 
     $action = ((isset($_POST['action'])) ? ( (!empty($_POST['action'])) ? $_POST['action'] : false ) : false);
 
-    if($action) switch($action) {
-        case 'log':
-            jx_log();
-            break;
+    switch($action) {
+        case 'log': jx_log(); break;
+        default: respond(false, 'invalid action');
     }
 
 
@@ -17,11 +16,10 @@
         header('Content-Type: application/json; charset=utf-8');
 
         $msg =  (isset($_POST['msg'] )) ? ( (!empty($_POST['msg'] )) ? $_POST['msg']  : false ) : false;
-        $type = (isset($_POST['type'])) ? ( (!empty($_POST['type'])) ? $_POST['type'] : false ) : false;
+        $type = (isset($_POST['type'])) ? ( (!empty($_POST['type'])) ? $_POST['type'] : 'ajax' ) : 'ajax';
 
-        if($msg) {
-            respond(true, toLog($msg,$type));
-        }
+        if($msg) respond(true, $msg);
+        else respond(false, 'empty msg');
     }
 
 ?>
