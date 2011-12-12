@@ -13,6 +13,9 @@ function createUploader(){
 
 $(function(){
     console.log('init');
+    $.post('jx/do.php',{action: "log", msg: "penis", type: "admin"}, function(data) {
+        console.log(data.cause);
+    },'json');
 });
 
 

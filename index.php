@@ -1,6 +1,7 @@
 <?php
 
 require_once "_config.inc";
+require_once "libs/libs.inc";
 
 $html_str = ""; // used to define namespaces in <html> node
 

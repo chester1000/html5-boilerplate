@@ -2,7 +2,7 @@
     ini_set('error_reporting', E_ALL);
     error_reporting(E_ALL);
     ini_set('log_errors', TRUE);
-    ini_set('error_log', dirname(__FILE__).'/log/general.log');
+    ini_set('error_log', dirname(__FILE__).'/log/php.log');
 
     if(((isset($test) ) ? $test : false)) {
         // if test mode

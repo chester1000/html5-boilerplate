@@ -23,7 +23,7 @@
             exit();
         }
 
-        echo '<p>ALL success</p>';
+        exit('<p>ALL success</p>');
         toLog('NAGIOS test requested: PASSED', 'admin');
 
     } else {
