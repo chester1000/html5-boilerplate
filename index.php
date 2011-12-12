@@ -19,19 +19,20 @@ if( $fb['on'] ) {
     // Get User ID
     $user = $facebook->getUser();
 
-    if ($user) {
+    if($user) { // always called whenever fb is enabled
         try {
             // Proceed knowing you have a logged in user who's authenticated.
             $user_profile = $facebook->api('/me');
         } catch (FacebookApiException $e) {
-            error_log($e);
+            error_log($e); // TODO: change this log into sth else
             $user = null;
         }
     }
 
     if ($user) $logoutUrl = $facebook->getLogoutUrl();
     else $loginUrl = $facebook->getLoginUrl();
-    // TODO: add all facebook functionalities
+
+    // TODO: add all other facebook functionalities
 }
 ?>
 <!DOCTYPE html>
@@ -99,7 +100,8 @@ if( $fb['on'] ) {
         <!-- Asynchronous Facebook API snippet.  -->
         <script>
             window.fbAsyncInit = function() {
-                FB.init({ cookie: true, xfbml: true, oauth: true,
+                FB.init({ cookie: true, xfbml: true, oauth: true, status: true,
+                    channelUrl: "<?=$URL."libs/facebook-sdk/channel.html";?>",
                     appId: '<?=$facebook->getAppID();?>'
                 });
                 FB.Event.subscribe('auth.login', function(response) { window.location.reload(); });

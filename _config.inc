@@ -17,6 +17,7 @@
     require_once "_db_vars.inc";
 
     $lang = "pl";
+    $URL = "//".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
 
     /*********************************
      * Database connection
@@ -59,7 +60,7 @@
      ********************/
 
     $fb = Array();
-    $fb['on'] = false; // change this to true after filling in all fb data
+    $fb['on'] = true; // change this to true after filling in all fb data
 
     if($fb['on']) {
 

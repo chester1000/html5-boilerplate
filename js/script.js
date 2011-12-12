@@ -13,7 +13,7 @@ function createUploader(){
 
 
 $(function(){
-    log();
+    // start js here
 });
 
 
