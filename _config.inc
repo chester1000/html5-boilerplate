@@ -60,7 +60,7 @@
      ********************/
 
     $fb = Array();
-    $fb['on'] = true; // change this to true after filling in all fb data
+    $fb['on'] = false; // change this to true after filling in all fb data
 
     if($fb['on']) {
 
