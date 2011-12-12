@@ -11,8 +11,9 @@ function createUploader(){
     });
 }
 
+
 $(function(){
-    log("init");
+    log();
 });
 
 

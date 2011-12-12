@@ -13,10 +13,8 @@
  * returns nothing;
  * > exits execution and prints JSON
  **/
-function respond($success, $cause, $more="") { // respond with normalized JSON format from all files requested by ajax
-    $respond = array('success'=>$success,'cause'=>$cause,'more'=>$more);
-    toLog($respond, "ajax");
-    exit(json_encode($respond));
+function respond($success, $cause, $more="") { // respond with normalized JSON format from all files requested by ajax and log it in meantime
+    exit(json_encode(toLog(array('success'=>$success,'cause'=>$cause,'more'=>$more),"ajax")));
 }
 
 /** utf-8 **
@@ -80,7 +78,7 @@ function toLog($str,  $type="access") { // log given string of given type (optio
             $fname = 'ajax.log'; break;
     }
 
-    $log_str = date('[Y-m-d H:i:s]') . " " . preg_replace('/\s+/', ' ', str_replace("\n", "", ((is_array($str)) ? print_r($str, true) : $str ) ))." ip => " . getIP() . ", user-agent => " . $_SERVER['HTTP_USER_AGENT'] . "\n";
+    $log_str = date('[Y-m-d H:i:s]') . " " . preg_replace('/\s+/', ' ', str_replace("\n", "", ((is_array($str)) ? print_r($str, true) : $str ) )).", ip => " . getIP() . ", user-agent => " . $_SERVER['HTTP_USER_AGENT'] . "\n";
 
     // save to general log files
     $f = fopen($log_path . "/log/" . $fname, "a+");
