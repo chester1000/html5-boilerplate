@@ -5,6 +5,7 @@
 
 /** respond **
  * RESPOND WITH VALID JSON STRING (FROM AJAX)
+ * ex. respond(true, "everything ok", array('id'=>"some_id",'name'=>'some_name'));
  **
  * $success (bool)   => if AJAX operation succeded
  * $cause   (string) => very quick explanation: "<type> <operation> <operation parameter>" (ex. "mysql insert user")
@@ -49,6 +50,7 @@ function ww_utf8($str, $width, $break, $cut = false) { // word-wrap for utf-8 te
 
 /** log **
  * LOGGING FUNCTION
+ * ex. toLog("User $user have logged in successfully", 'user');
  **
  * $str  => string to be logged
  * $type => type of logging:
@@ -100,5 +102,48 @@ function getIP() { // get IP of current connection; called from toLog
             $_SERVER['REMOTE_ADDR'] : $_SERVER['HTTP_X_FORWARDED_FOR']) : $_SERVER['HTTP_CLIENT_IP']);
     return str_replace("unknown, ", "", $ip);
 }
+
+/** safe superglobal tables **
+ * RETURNS AND CACHES SAFE CONTENT OF SUPERGLOBAL TABLES (POST, GET, COOKIE, REQUEST)
+ * ex. __('password','mysql','post');
+ **
+ * $name => index from tables
+ * $dest => [vel destination] states where data is destined to get (html|xml|mysql|sql|json|none); case insensitive
+ *  - passing "none", false or empty string will return original string
+ * $type => which table to use (post|p|get|g|cookie|c|request|r); 'request' is default; case insensitive
+ **
+ * returns string safe to use in $dest or false if destination is empty
+ */
+function __($name,$dest=false,$type="REQUEST") {
+
+    // figre out where from to retreive data
+    $_type = array('P'=>'POST','G'=>'GET','C'=>'COOKIE','R'=>'REQUEST'); // TODO: should other arrays be added?
+    if(strlen(($type=strtoupper($type)))==1 and $_type[$type]!="") $type=$_type[$type];
+    elseif(!in_array($type,$_type)) $type="REQUEST";
+
+    // retreive data (if unset set data and dest to false, so function returns false)
+    /* if($type=="REQUEST") $data = isset($_REQUEST[$name]) ? $_REQUEST[$name] : ($dest = false); else // uncomment if php.ini won't work ;( */
+    $data = isset($GLOBALS[($type="_$type")][$name]) ? $GLOBALS[$type][$name] : ($dest = false);
+
+    //proceed with data
+    switch(strtolower($dest)) {
+        case 'html':
+        case 'xml':
+            return htmlspecialchars($data, ENT_QUOTES, "UTF-8");
+
+        case 'mysql':
+        case 'sql':
+            // encode for mysql
+            return $data;
+
+        case 'json':
+            // does json needs any encoding?
+            return $data;
+
+        default:
+            return $data;
+    }
+}
+
 
 ?>

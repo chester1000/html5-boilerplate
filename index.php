@@ -1,5 +1,4 @@
 <?php
-
 require_once "_config.inc";
 require_once "libs/libs.inc";
 
@@ -76,7 +75,11 @@ if( $fb['on'] ) {
     </header>
 
     <div role="main">
+        <h1>It is NOT an empty page!</h1>
 
+        <!--  PLAYGROUND -->
+        <p><?=__("html",'mysql');?></p>
+        <!-- /PLAYGROUND -->
     </div>
 
     <footer>
