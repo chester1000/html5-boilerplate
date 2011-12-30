@@ -1,6 +1,7 @@
 <?php
-require_once "_config.inc";
 require_once "libs/libs.inc";
+require_once "_config.inc";
+
 
 $html_str = ""; // used to define namespaces in <html> node
 
@@ -78,7 +79,7 @@ if( $fb['on'] ) {
         <h1>It is NOT an empty page!</h1>
 
         <!--  PLAYGROUND -->
-        <p><?=__("html",'mysql');?></p>
+        <p><?=__("czy",'mysql');?></p>
         <!-- /PLAYGROUND -->
     </div>
 

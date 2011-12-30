@@ -110,6 +110,7 @@ function getIP() { // get IP of current connection; called from toLog
  * $name => index from tables
  * $dest => [vel destination] states where data is destined to get (html|xml|mysql|sql|json|none); case insensitive
  *  - passing "none", false or empty string will return original string
+ *  - to use mysql mysql connection must 
  * $type => which table to use (post|p|get|g|cookie|c|request|r); 'request' is default; case insensitive
  **
  * returns string safe to use in $dest or false if destination is empty
@@ -117,28 +118,31 @@ function getIP() { // get IP of current connection; called from toLog
 function __($name,$dest=false,$type="REQUEST") {
 
     // figre out where from to retreive data
-    $_type = array('P'=>'POST','G'=>'GET','C'=>'COOKIE','R'=>'REQUEST'); // TODO: should other arrays be added?
-    if(strlen(($type=strtoupper($type)))==1 and $_type[$type]!="") $type=$_type[$type];
-    elseif(!in_array($type,$_type)) $type="REQUEST";
+    $_type = array('P'=>'POST','G'=>'GET','C'=>'COOKIE','R'=>'REQUEST','V'=>'VARIABLE'); // TODO: should other arrays be added?
+    if(strlen(($type=strtoupper($type)))==1 and $_type[$type]!="") $type=$_type[$type]; // if shortcut provided - change it to full-name
+    elseif(!in_array($type,$_type)) $type="REQUEST"; // if fullname isn't in array - set default type
 
     // retreive data (if unset set data and dest to false, so function returns false)
-    /* if($type=="REQUEST") $data = isset($_REQUEST[$name]) ? $_REQUEST[$name] : ($dest = false); else // uncomment if php.ini won't work ;( */
-    $data = isset($GLOBALS[($type="_$type")][$name]) ? $GLOBALS[$type][$name] : ($dest = false);
+    if( ini_get('auto_globals_jit') and $type == "REQUEST") $data = isset($_REQUEST[$name]) ? $_REQUEST[$name] : ($dest = false); // if php won't see $_REQUEST in $GLOBALS
+    elseif($type=="VARIABLE") $data = isset($$name) ? $$name : ($dest = false); // if VARIABLE requested (they're not in $GLOBALS either)
+    else $data = isset($GLOBALS[($type="_$type")][$name]) ? $GLOBALS[$type][$name] : ($dest = false); // everything else
 
     //proceed with data
-    switch(strtolower($dest)) {
+    switch( strtolower($dest) ) {
         case 'html':
         case 'xml':
+        case '*ml':
             return htmlspecialchars($data, ENT_QUOTES, "UTF-8");
 
         case 'mysql':
         case 'sql':
+        case '*sql':
             // encode for mysql
-            return $data;
+            return mysql_real_escape_string($data);
 
         case 'json':
             // does json needs any encoding?
-            return $data;
+            return json_encode($data);
 
         default:
             return $data;
