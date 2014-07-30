@@ -1,14 +1,28 @@
 
 // usage: log('inside coolFunc', this, arguments);
 // paulirish.com/2009/log-a-lightweight-wrapper-for-consolelog/
+/*
 window.log = function(){
-  log.history = log.history || [];   // store logs to an array for reference
-  log.history.push(arguments);
-  if(this.console) {
-    arguments.callee = arguments.callee.caller;
-    var newarr = [].slice.call(arguments);
-    (typeof console.log === 'object' ? log.apply.call(console.log, console, newarr) : console.log.apply(console, newarr));
-  }
+    log.history = log.history || [];   // store logs to an array for reference
+    log.history.push(arguments);
+    if(this.console) {
+        arguments.callee = arguments.callee.caller;
+
+        var newarr = [].slice.call(arguments);
+        if(typeof console.log === 'object') log.apply.call(console.log, console, newarr);
+        else {
+            
+            console.log.apply(console, newarr);
+        }
+    }
+};
+*/
+
+window.log = function(msg) {
+    log.history = log.history || [];
+    log.history.push(arguments);
+    $.post('jx/do.php',{action:"log", type:"ajax", msg: msg});
+    console.log(msg);
 };
 
 // make it safe to use console.log always
@@ -16,5 +30,5 @@ window.log = function(){
 {console.log();return window.console;}catch(err){return window.console={};}})());
 
 
-// place any jQuery/helper plugins in here, instead of separate, slower script files.
+// place any jQuery/helper plugins in here, instead of separate, slower script files. 
 
